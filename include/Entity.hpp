@@ -17,13 +17,9 @@ namespace Engine {
 
             virtual void Update(float deltatime) {};
 
-            bool IsVisible() const {
-                return this->visible;
-            }
+            bool IsVisible() const;
 
-            void SetVisible(const bool visible) {
-                this->visible = visible;
-            }
+            void SetVisible(const bool visible);
 	};
 
 };

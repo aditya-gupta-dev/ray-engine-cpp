@@ -29,3 +29,5 @@ bool Engine::Math::Vec2<T>::operator==(const Engine::Math::Vec2<T>& rhs) {
     }
     return false;
 }
+template class Engine::Math::Vec2<float>;
+template class Engine::Math::Vec2<int>;
