@@ -7,10 +7,11 @@ constexpr int kWindowHeight = 720;
 
 namespace Engine {
 	struct WindowConfig {
-		int Width = kWindowWidth;
-		int Height = kWindowHeight;
-		bool Vsync = false;
-		bool Debug = true;
+		const int Width = kWindowWidth;
+		const int Height = kWindowHeight;
+		const bool Vsync = false;
+		const bool Debug = true;
+		const int FPS = 60;
 
 		const std::string Title = "Game";
 

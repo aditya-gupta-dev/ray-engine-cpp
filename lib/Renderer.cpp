@@ -7,6 +7,10 @@ std::unique_ptr<Engine::Renderer::Renderer> Engine::Renderer::Init(const WindowC
 	InitWindow(config.Width, config.Height, config.Title.c_str());
 	if (config.Vsync) {
 		SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
+	} else {
+	    if (config.FPS > 0) {
+	        SetTargetFPS(config.FPS);
+	    }
 	}
 
 	return std::make_unique<Renderer>(config);

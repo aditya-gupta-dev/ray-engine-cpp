@@ -21,3 +21,11 @@ Engine::Math::Vec2<T>& Engine::Math::Vec2<T>::operator-=(const Engine::Math::Vec
 
 	return *this;
 }
+
+template<typename T>
+bool Engine::Math::Vec2<T>::operator==(const Engine::Math::Vec2<T>& rhs) {
+    if (this->X == this->X && this->Y == this->Y) {
+        return true;
+    }
+    return false;
+}
