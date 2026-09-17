@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(GameRaylib CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Default to Release build type for maximum performance if none is specified
@@ -57,3 +57,40 @@ if (NOT raylib_FOUND)
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 endif()
+
+# ==============================================================================
+# Static Build Target
+# ==============================================================================
+# Create a secondary executable target for the static build
+add_executable(${PROJECT_NAME}_static EXCLUDE_FROM_ALL Main.cpp ${SOURCES} ${HEADERS})
+target_include_directories(${PROJECT_NAME}_static PRIVATE include)
+
+# Apply the same optimization flags to the static target
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME}_static PRIVATE -O3 -march=native -ffast-math)
+    if(ipo_supported)
+        set_property(TARGET ${PROJECT_NAME}_static PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+    endif()
+    
+    # Statically link the C++ runtime libraries to increase portability
+    # (Note: Fully static `-static` would require a static version of raylib and X11 to be installed)
+    target_link_options(${PROJECT_NAME}_static PRIVATE -static-libgcc -static-libstdc++)
+elseif(MSVC)
+    target_compile_options(${PROJECT_NAME}_static PRIVATE /O2 /Ob2 /Oi /Ot /fp:fast)
+    set_property(TARGET ${PROJECT_NAME}_static PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
+# Link raylib to the static target
+if (NOT raylib_FOUND)
+    target_link_libraries(${PROJECT_NAME}_static PRIVATE ${raylib_LIBRARIES})
+    target_include_directories(${PROJECT_NAME}_static PRIVATE ${raylib_INCLUDE_DIRS})
+    target_link_options(${PROJECT_NAME}_static PRIVATE ${raylib_LDFLAGS})
+else()
+    target_link_libraries(${PROJECT_NAME}_static PRIVATE raylib)
+endif()
+
+# Bind the 'make static' command to build the GameRaylib_static target
+add_custom_target(static
+    DEPENDS ${PROJECT_NAME}_static
+    COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan "Built static executable: ${PROJECT_NAME}_static"
+)
