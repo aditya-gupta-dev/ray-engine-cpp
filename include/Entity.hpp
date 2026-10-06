@@ -23,7 +23,7 @@ namespace Engine {
 
             virtual void Update(float deltatime) {};
 
-            bool IsVisible() const;
+            inline bool IsVisible() const { return this->visible; };
 
             void SetVisible(const bool visible);
             void SetPosition(const Engine::Math::Vec2<float> pos);

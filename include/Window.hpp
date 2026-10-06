@@ -9,9 +9,9 @@ namespace Engine {
 	struct WindowConfig {
 		const int Width = kWindowWidth;
 		const int Height = kWindowHeight;
-		const bool Vsync = false;
+		const bool Vsync = true;
 		const bool Debug = true;
-		const int FPS = 60;
+		const int FPS = -1;
 
 		const std::string Title = "Game";
 
